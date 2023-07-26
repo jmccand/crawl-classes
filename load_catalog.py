@@ -4,6 +4,7 @@ import os
 import re
 import unicodedata
 import pickle
+from coursedef import Course
 
 
 cache_dir = 'caches/'
@@ -23,14 +24,6 @@ def get_cache(path, filename):
             f.write(html)
     assert not html == None
     return html
-
-class Course:
-    def __init__(self, codes, title, description, prereqs, coreqs):
-        self.codes = codes
-        self.title = title
-        self.description = description
-        self.prereqs = prereqs
-        self.coreqs = coreqs
 
 pf = 0
 cof = 0
