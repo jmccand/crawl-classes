@@ -47,14 +47,14 @@ for page_num in range(1, 21):
             if not d is None:
                 dw = d.groups()[0]
             p_ = cdivtext.lower().count('prereq')
-            p = re.search(r'Prerequisis?tes?(:| -| or Other Requirements:| for undergraduates:) *(<a.*>(.*)<\/a>.*)+', cdivtext)
+            p = re.search(r'Prerequisis?tes?(:| -| or Other Requirements:| for undergraduates:) *(<a.*?>(.*?)<\/a>)', cdivtext)
             pw = []
             if p is None:
                 if p_ > 1:
                     pf += 1
             else:
                 pw = [p.groups()[-1]]
-            co = re.search(r'(C|c)orequisites?(:| -| )( Students in| PHYS 1500,)?(<\/strong>)? *(<a.*>(.*)<\/a>.*)+', cdivtext)
+            co = re.search(r'(C|c)orequisites?(:| -| )( Students in| PHYS 1500,)?(<\/strong>)? *(<a.*?>(.*?)<\/a>)', cdivtext)
             co_ = cdivtext.lower().count('coreq')
             cow = []
             if co is None:
