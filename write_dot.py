@@ -29,7 +29,7 @@ def wedge(f, fm, to):
 with open(rfile, 'rb') as f:
     cc = pickle.load(f)
     with open(wdot, 'w') as d:
-        d.write('digraph D {\nlayout=twopi; graph [ranksep="30 2" overlap_scale=-5];\nratio=auto;\nfontsize="5"\n"ME" [shape=circle root=true fontsize="240"]')
+        d.write('digraph D {\nlayout=twopi; graph [ranksep="30 2" overlap_scale=-5];\nratio=auto;\nfontsize="5"\n"RPI" [shape=circle root=true fontsize="240" fontcolor="red"]')
         for tt, cs in cc.items():
             if tt[5] in ('1', '2', '3', '4'):
                 if len(cs.prereqs) > 0:
@@ -47,5 +47,5 @@ with open(rfile, 'rb') as f:
                         wedge(d, p[:4]+p[5:], tt[:4]+tt[5:])
                 else:
                     if not shrink or tt in intree:
-                        wedge(d, 'ME', tt[:4]+tt[5:])
+                        wedge(d, 'RPI', tt[:4]+tt[5:])
         d.write('\n}')
