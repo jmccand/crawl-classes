@@ -1,3 +1,4 @@
+# define a Course object to store invormation about a course
 class Course:
     def __init__(self, codes, title, description, prereqs, coreqs):
         self.codes = codes
