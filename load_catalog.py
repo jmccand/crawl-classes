@@ -109,7 +109,7 @@ for page_num in range(1, 21):
             # add to ourse dictionary
             course_dict[c] = Course(c, t, dw, pw, cow)
 
-# print(list(c.codes for c in course_dict.values()))
+# print failure statistics            
 print(f'prereqs parse success percentage: {1 - pf/len(course_dict)}')
 print(f'coreqs parse success percentage: {1 - cof/len(course_dict)}')
 print(f'cross listed parse success percentage: {1 - clf/len(course_dict)}')
