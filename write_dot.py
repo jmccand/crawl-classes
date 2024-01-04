@@ -9,6 +9,9 @@ if len(sys.argv) < 2:
     print('expected command line argument: <write file>')
     exit()
 wdot = sys.argv[1]
+filter_code = ''
+if len(sys.argv) > 2:
+    filter_code = sys.argv[2]
 
 # shrink defines whether or not to graph courses with no prereqs
 shrink = True
@@ -37,34 +40,46 @@ def wnode(f, t):
 def wedge(f, fm, to):
     f.write(f'\n"{fm}" -> "{to}" [color="black:invis:black" weight="2"]')
 
+# add prerequisites recursively
+def add_prereqs_rec(tt):
+    # check if already covered
+    if not tt in intree:
+        intree.add(tt)
+        for p in cc[tt].prereqs:
+            # add prereq
+            add_prereqs_rec(p)
+
 with open(rfile, 'rb') as f:
     cc = pickle.load(f)
     with open(wdot, 'w') as d:
-        # write graph type, RPI central node
-        d.write('digraph D {\nlayout=twopi; graph [ranksep="30 2" overlap_scale=-5];\nratio=auto;\nfontsize="5"\n"RPI" [shape=circle root=true fontsize="240" fontcolor="red"]')
         # find the courses with prerequisites
         for tt, cs in cc.items():
-            if tt[5] in ('1', '2', '3', '4'):
-                if len(cs.prereqs) > 0:
-                    for p in cs.prereqs:
-                        # add course to tree set
-                        intree.add(p)
+            if tt[5] in ('1', '2', '3', '4') and (filter_code == '' or tt[:4] == filter_code):
+                if len(cs.prereqs) > 0 or not shrink:
+                    # add this course
+                    add_prereqs_rec(tt)
+
+        # write graph type, RPI central node
+        # adjust settings based on graph size
+        if len(intree) < 50:
+            d.write('digraph D {\nlayout=twopi;\nratio=auto;\nfontsize="20"\n"RPI" [shape=circle root=true fontsize="20" fontcolor="red"]')
+        else:
+            d.write('digraph D {\nlayout=twopi; graph [ranksep="30 2" overlap_scale=-5];\nratio=auto;\nfontsize="5"\n"RPI" [shape=circle root=true fontsize="240" fontcolor="red"]')
 
         # write nodes
-        for tt, cs in cc.items():
-            if tt[5] in ('1', '2', '3', '4'):
-                if not shrink or len(cs.prereqs) > 0 or tt in intree:
-                    wnode(d, tt[:4]+tt[5:])
-                    
+        for tt in intree:
+            assert tt[5] in ('1', '2', '3', '4')
+            wnode(d, tt[:4]+tt[5:])
+            
         # write edges
         d.write('\n')
-        for tt, cs in cc.items():
-            if tt[5] in ('1', '2', '3', '4'):
-                if len(cs.prereqs) > 0:
-                    for p in cs.prereqs:
-                        wedge(d, p[:4]+p[5:], tt[:4]+tt[5:])
-                else:
-                    if not shrink or tt in intree:
-                        # connect no prereqs courses to central node
-                        wedge(d, 'RPI', tt[:4]+tt[5:])
+        for tt in intree:
+            cs = cc[tt]
+            assert tt[5] in ('1', '2', '3', '4')
+            if len(cs.prereqs) > 0:
+                for p in cs.prereqs:
+                    wedge(d, p[:4]+p[5:], tt[:4]+tt[5:])
+            else:
+                # connect no prereqs courses to central node
+                wedge(d, 'RPI', tt[:4]+tt[5:])
         d.write('\n}')
