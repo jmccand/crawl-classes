@@ -1,10 +1,14 @@
 import pickle
 from coursedef import Course
+import sys
 
 # write the dot file from the catalog
 # note: only writes courses with prerequisites
 rfile = 'catalog.pickle'
-wdot = 'catdot.dot'
+if len(sys.argv) < 2:
+    print('expected command line argument: <write file>')
+    exit()
+wdot = sys.argv[1]
 
 # shrink defines whether or not to graph courses with no prereqs
 shrink = True
@@ -51,6 +55,7 @@ with open(rfile, 'rb') as f:
             if tt[5] in ('1', '2', '3', '4'):
                 if not shrink or len(cs.prereqs) > 0 or tt in intree:
                     wnode(d, tt[:4]+tt[5:])
+                    
         # write edges
         d.write('\n')
         for tt, cs in cc.items():
