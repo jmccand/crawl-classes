@@ -10,4 +10,6 @@ This project includes all of the tools which are necessary to produce such a gra
 - Converting the Python dictionary of courses to a '.dot' file for graph display
 - Using dot's command line interface (dot -Ktwopi -o <output_file.type> -T<image type> <file.dot>) to generate an image from the .dot file
 
-Here's a sample output: ![prereqs graph](rpidot.png)
+Here's a sample output of all courses in the RPI catalog with prerequisites: ![prereqs graph](rpidot.png)
+
+Here's an interesting graph of Computer Science departement courses at RPI: ![cs graph](cs_only.png)
