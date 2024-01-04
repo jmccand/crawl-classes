@@ -8,5 +8,6 @@ This project includes all of the tools which are necessary to produce such a gra
 - Instantiating Course objects for each course in the catalog
 - Writing the catalog (a Python dictionary) to a pickled file for later use
 - Converting the Python dictionary of courses to a '.dot' file for graph display
+- Using dot's command line interface (dot -Ktwopi -o <output_file.type> -T<image type> <file.dot>) to generate an image from the .dot file
 
 Here's a sample output: ![prereqs graph](rpidot.png)
